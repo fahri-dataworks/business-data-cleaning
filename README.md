@@ -14,12 +14,14 @@ During the development, I made several specific technical choices to ensure data
 - **The CustomerID Dilemma:** Roughly 25% of the data had missing `CustomerID`. Instead of guessing or using a mean, I dropped these for the "Loyalty Analysis" version of the data, as ghost-customers skew retention KPIs.
 - **Memory Management:** I manually downcast `float64` to `float32` and `int64` to `int32`. It’s a small step that cut RAM usage by over 60%, which is critical if you're deploying this on a small cloud instance.
 
-## Key Metrics Post-Refinery
+## 📊 Real-World Processing Results
 
-- **Input Rows:** 541,909
-- **Valid Business Records:** 406,829 (After stripping noise, tests, and non-customer logs)
-- **Memory Footprint:** Reduced from ~98MB to ~30MB.
-- **Integrity:** Verified 0% duplicates and 100% timestamp consistency.
+After executing the pipeline on the full dataset, the results were as follows:
+
+- **Initial Records Ingested:** 541,909
+- **Final Refined Records:** 397,884
+- **Data Noise Removed:** ~144,025 records (Missing IDs, Zero prices, and invalid quantities)
+- **Processing Efficiency:** Optimized via downcasting and categorical mapping.
 
 ## How to Run This
 

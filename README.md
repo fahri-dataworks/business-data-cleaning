@@ -1,6 +1,4 @@
-Berikut versi **rapih, konsisten, dan siap dipakai sebagai `README.md` di GitHub** (tanpa artefak merge conflict `HEAD / ===== / >>>>>` dan dengan struktur yang profesional).
 
-Silakan copy–paste langsung ke repo kamu.
 
 ---
 

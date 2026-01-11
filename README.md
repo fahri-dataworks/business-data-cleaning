@@ -1,118 +1,114 @@
+Berikut versi **rapih, konsisten, dan siap dipakai sebagai `README.md` di GitHub** (tanpa artefak merge conflict `HEAD / ===== / >>>>>` dan dengan struktur yang profesional).
+
+Silakan copy–paste langsung ke repo kamu.
+
+---
+
 # 🚀 Data Refinery: Cleaning 540K+ Online Retail Transactions
 
 **Developed by Fahri – Dataworks**
 
-## 💡 Project Logic
+## 💡 Project Overview
 
- HEAD
-Most data cleaning examples stop at filling missing values. In real-world business environments, high-volume transactional data is far messier. This project demonstrates a professional, production-oriented workflow for refining large-scale retail datasets.
-=======
-Most "data cleaning" tutorials stop at filling missing values. In real-world retail and finance contexts, data preparation is far more complex. This project demonstrates a **professional, business-aware ETL workflow** for handling high-volume online retail transaction data.
+Most *“data cleaning”* tutorials stop at filling missing values.
+In real-world **retail and finance environments**, data preparation is far more complex and risky.
 
-The goal is not merely to remove bad records, but to **preserve financial accuracy and auditability**, ensuring the final dataset can be confidently used for revenue reporting, customer analytics, and executive decision-making.
- eed8a23 (Add production-ready ETL pipeline with documented Kaggle dataset samples)
+This project demonstrates a **production-grade, business-aware ETL pipeline** for processing high-volume online retail transactions.
+The goal is not simply to remove bad records, but to **preserve financial accuracy, auditability, and executive-level reporting integrity**.
 
-Rather than blindly removing problematic rows, the data was structured using explicit business rules so that financial outputs — especially revenue figures — can be trusted by decision-makers such as finance leaders and executives.
- HEAD
+The output dataset is suitable for:
+
+* Revenue reporting
+* Customer analytics
+* Cohort, retention, and CLV modeling
+* Executive dashboards
+
+---
+
 ## 🛠️ Engineering Decisions (The “Why”)
 
-* **Handling the ‘C’ Prefix (Cancellations):**
-  Transactions with a ‘C’ prefix were explicitly isolated and flagged instead of being deleted. This preserves financial traceability and enables accurate Gross vs Net revenue reporting.
+### 1️⃣ Cancellation-Aware Revenue Logic
 
-* **The CustomerID Dilemma:**
-  Records with missing CustomerID values were removed to prevent ghost-customer bias in loyalty, cohort, and retention analyses. This ensures customer-level KPIs are based only on identifiable entities.
+Invoices starting with `C` indicate **cancellations or returns**.
+These are **flagged instead of deleted** so that:
 
-* **Numerical Downcasting:**
-  Numerical columns were converted to more memory-efficient data types (e.g., float64 → float32). This significantly reduced the dataset’s memory footprint, enabling processing on cost-effective cloud or local environments without sacrificing analytical reliability.
+* Gross revenue
+* Net revenue
+* Refund impact
 
-## 📂 Project Architecture
+can be accurately calculated and audited.
 
-* `scripts/` — Contains `cleaner.py` (core data cleaning and transformation logic)
-* `data/` — Local storage for raw inputs and refined outputs (excluded from version control)
-* `requirements.txt` — Project dependency manifest
+### 2️⃣ Customer Identity Integrity
 
-## 📊 Real-World Processing Results
+Rows without `CustomerID` are removed.
+This prevents **ghost customers** that would distort:
 
-* **Initial Records Ingested:** 541,909
-* **Final Refined Records:** 397,884
-* **Data Noise Removed:** ~144,025 records
-* **Output:** Business-ready, memory-efficient retail transaction dataset
+* Retention rates
+* Loyalty metrics
+* Lifetime value calculations
 
-## 🚀 How to Run
+Only identifiable customers are included in customer-level analytics.
 
-1. **Clone**
+### 3️⃣ Sales Validity Rules
 
-   ```bash
-   git clone https://github.com/fahri-dataworks/business-data-cleaning.git
-   ```
-2. **Install Dependencies**
+For non-cancelled invoices:
 
-   ```bash
-   pip install -r requirements.txt
-   ```
-3. **Run the Pipeline**
+* `Quantity` must be positive
+* `UnitPrice` must be positive
 
-   ```bash
-   python scripts/cleaner.py
-   ```
+This removes:
 
-## 📩 Let’s Talk Business
+* Zero-value transactions
+* Data entry errors
+* Negative revenue noise
 
-I am available for freelance data engineering, data cleaning, and automation projects involving high-volume or business-critical datasets.
+### 4️⃣ Memory-Efficient Processing
 
-* **Upwork:** View My Freelancer Profile
-* **Email:** [fahriramadhanidris6@gmail.com](mailto:fahriramadhanidris6@gmail.com)
+Numerical columns are **downcast** (e.g., `float64 → float32`) to:
 
-> “I don’t just clean data — I prepare it for real business de
-=======
-- **Cancellation-Aware Logic (`InvoiceNo` with `C` prefix)**
-  Transactions marked as cancellations are explicitly flagged instead of deleted, enabling accurate **Gross vs Net revenue reconciliation**.
+* Reduce RAM usage
+* Allow processing on low-cost machines
+* Maintain analytical precision
 
-- **Customer Identity Integrity**
-  Records with missing `CustomerID` values are removed to prevent ghost-customer bias in **Retention, Loyalty, and CLV analysis**.
+This makes the pipeline **cloud-friendly and scalable**.
 
-- **Sales Validity Rules**
-  Non-cancelled transactions are required to have positive `Quantity` and `UnitPrice`, eliminating zero-value and negative-value revenue noise.
-
-- **Memory-Conscious Processing**
-  Numerical columns are downcast to optimal data types to reduce memory usage and allow execution on cost-efficient local or cloud environments.
+---
 
 ## 📂 Project Architecture
 
-- `scripts/` — Contains `cleaner.py` (core ETL and business logic)
-- `data/` — Local storage for raw inputs and refined outputs (excluded from Git for security)
-- `requirements.txt` — Python dependency manifest
+```
+business-data-cleaning/
+│
+├── scripts/
+│   └── cleaner.py        # Core ETL & business logic
+│
+├── data/                # Raw & cleaned data (gitignored)
+│
+├── requirements.txt     # Python dependencies
+│
+└── README.md
+```
+
+---
 
 ## 📊 Real-World Processing Results
 
-- **Initial Records Ingested:** 541,909
-- **Final Refined Records:** 406,789
-- **Data Noise Removed / Isolated:** ~135,000 records
-- **Execution Environment:** VS Code + Python Virtual Environment
-- **Output Format:** Analysis-ready CSV
+| Metric                     | Value                 |
+| -------------------------- | --------------------- |
+| Initial Records            | 541,909               |
+| Final Refined Records      | 406,789               |
+| Records Removed / Isolated | ~135,000              |
+| Output Format              | Analysis-ready CSV    |
+| Execution                  | VS Code + Python venv |
 
-## 🚀 How to Run
+The removed records are either:
 
-1. **Clone Repository**
+* Cancellations (retained but flagged), or
+* Invalid for customer & revenue analytics
 
-   ```bash
-   git clone https://github.com/fahri-dataworks/business-data-cleaning.git
-   cd business-data-cleaning
-   ```
+Nothing important is blindly deleted.
 
-2. **Install Dependencies**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. **Run the ETL Pipeline**
-
-   ```bash
-   python3 scripts/cleaner.py
-   ```
-
-All processing steps are logged and fully auditable via terminal output.
+---
 
 ## 📌 Sample Output (Post-ETL)
 
@@ -122,15 +118,41 @@ All processing steps are logged and fully auditable via terminal output.
 | C536379   | -1       | 4.25      | 17850      | True         |
 | 536370    | 2        | 3.75      | 12583      | False        |
 
-> Cancellation records are intentionally retained for financial reconciliation and reporting accuracy.
+> Cancellation rows are preserved so finance teams can reconcile gross vs net revenue.
+
+---
+
+## 🚀 How to Run
+
+### 1️⃣ Clone the repository
+
+```bash
+git clone https://github.com/fahri-dataworks/business-data-cleaning.git
+cd business-data-cleaning
+```
+
+### 2️⃣ Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 3️⃣ Run the ETL pipeline
+
+```bash
+python scripts/cleaner.py
+```
+
+All transformations are logged and fully auditable in the terminal.
+
+---
 
 ## 📩 Let’s Talk Business
 
-I am available for **freelance data engineering, ETL automation, and analytics projects**.
+I am available for **freelance data engineering, ETL automation, and business-critical analytics projects**.
 
-- **Upwork:** [https://www.upwork.com/freelancers/~017c3d7b28f4181c81](https://www.upwork.com/freelancers/~017c3d7b28f4181c81)
-- **Email:** [fahriramadhanidris6@gmail.com](mailto:fahriramadhanidris6@gmail.com)
-- **GitHub:** [https://github.com/fahri-dataworks](https://github.com/fahri-dataworks)
+* **Upwork:** [https://www.upwork.com/freelancers/~017c3d7b28f4181c81](https://www.upwork.com/freelancers/~017c3d7b28f4181c81)
+* **Email:** [fahriramadhanidris6@gmail.com](mailto:fahriramadhanidris6@gmail.com)
+* **GitHub:** [https://github.com/fahri-dataworks](https://github.com/fahri-dataworks)
 
-> _"I don’t just clean data — I prepare it for high-stakes business decisions."_
- eed8a23 (Add production-ready ETL pipeline with documented Kaggle dataset samples)
+> *“I don’t just clean data — I prepare it for high-stakes business decisions.”*
